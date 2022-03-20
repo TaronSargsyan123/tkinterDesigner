@@ -5,6 +5,11 @@ from tkinter import *
 
 class defaultInspector:
     def __init__(self, inspectorCanvas):
+
+
+
+
+
         self.inspectorCanvas = inspectorCanvas
         self.xCnavas = tkinter.Canvas(self.inspectorCanvas)
         self.yCnavas = tkinter.Canvas(self.inspectorCanvas)
@@ -85,6 +90,15 @@ class defaultInspector:
 class textLabelInspector(defaultInspector):
     def drawInspector(self, textLabel):
 
+        self.textSv = StringVar()
+        self.xSv = StringVar()
+        self.ySv = StringVar()
+        self.widthSv = StringVar()
+        self.heightSv = StringVar()
+
+
+
+
         self.__textLabel = textLabel
         self.widgetInfo = widgetInfo(0, 0, 0, 0, "Null", textLabel, "white", "black")
         self.bg = self.widgetInfo.getBg()
@@ -118,7 +132,10 @@ class textLabelInspector(defaultInspector):
         self.fgColorShoserButton.pack(side=tkinter.RIGHT, padx=10)
 
 
+
+
         #self.refreshButton.pack(side=tkinter.TOP)
+
 
 
     def setTextLabel(self, value):

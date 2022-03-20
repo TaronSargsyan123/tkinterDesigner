@@ -1,6 +1,5 @@
-import tkinter
 import tkinter as tk
-
+from button import button
 import textLabel
 from textLabel import textLabel
 from tkinter import *
@@ -12,6 +11,7 @@ class MainWindow:
     def __init__(self):
         print("[INFO]: init start...")
         self.textLabelCount = 1
+        self.buttonCount = 1
 
         self.mainWindowColorOne = ""
         self.mainWindowColorTwo = ""
@@ -72,7 +72,8 @@ class MainWindow:
 
         self.leftCanvas = tk.Canvas(self.allCanvas, bg="white", bd=0, highlightthickness=0, relief=FLAT)
 
-        self.createButtonButton = tk.Button(self.leftCanvas, text="     create label       ", command=self.createTextLabelCommand, relief='ridge')
+        self.createLabelButton = tk.Button(self.leftCanvas, text="     create label       ", command=self.createTextLabelCommand, relief='ridge')
+        self.createButtonButton = tk.Button(self.leftCanvas, text="     create button       ", command=self.createButtonCommand, relief='ridge')
         self.centerCanvas = tk.Canvas(self.allCanvas, bg="#D4D4D4", relief=FLAT)
 
         self.rightCanvas = tk.Canvas(self.allCanvas, bg="white", relief=FLAT)
@@ -88,6 +89,7 @@ class MainWindow:
         self.leftCanvas.pack(side=tk.LEFT, fill=tk.Y)
         self.rightCanvas.pack(side=tk.RIGHT, fill=tk.Y)
         self.centerCanvas.pack(side=tk.RIGHT, fill=tk.BOTH, expand=tk.TRUE)
+        self.createLabelButton.pack(side=tk.TOP, pady=5, fill=tk.X)
         self.createButtonButton.pack(side=tk.TOP, pady=5, fill=tk.X)
         self.codeGenerateButton.pack(side=tk.BOTTOM, fill=tk.X)
 
@@ -129,7 +131,13 @@ class MainWindow:
         self.inspector.setTextLabel(self.widgetInfo.getItem())
         self.setInspectorInfo()
 
+    def createButtonCommand(self):
+        self.button = button(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector)
+        self.buttonCount += 1
+        self.widgetsList.append(self.button)
 
+        self.inspector.setTextLabel(self.widgetInfo.getItem())
+        self.setInspectorInfo()
 
 
 
@@ -156,7 +164,7 @@ class MainWindow:
         upBarLabel = tk.Label(self.dragCanvas, image=self.upBarImage)
         self.dragCanvas.place(x=50, y=20, width=width, height=height + 30)
         self.centerWindowTitleCanvas.place(x=30, y=0, height=30)
-        self.centerWindowTitle.pack( side=LEFT, anchor=W)
+        self.centerWindowTitle.pack( side=LEFT, anchor=SW)
 
         self.itemsCanvas.place(x=0, y=30, width=width, height=height)
         upBarLabel.place(x=width - 140, y=0, width=140, height=30)

@@ -5,15 +5,15 @@ from tkinter import *
 from singleton import widgetInfo
 
 
-class textLabel(parentItem):
+class button(parentItem):
     def __init__(self, x, y, canvas, count, list, inspector):
         super().__init__(x, y)
         self.list = list
         self.count = count
-        self.id = "Label" + str(self.count)
+        self.id = "Button" + str(self.count)
         self.__width = 70
         self.__height = 40
-        self.text = "text" + str(self.count)
+        self.text = "button" + str(self.count)
         self.bg = "white"
         self.fg = "black"
         self.relief = tkinter.FLAT
@@ -46,10 +46,9 @@ class textLabel(parentItem):
 
 
     def createWidgets(self):
-        self.button = tkinter.Button(self.canvas, relief=SOLID, text=self.text, bg=self.bg, fg=self.fg,
-                                     highlightbackground=self.borderColor, borderwidth=0, command=self.command)
+        self.button = tkinter.Button(self.canvas, text=self.text, bg=self.bg, fg=self.fg,command=self.command)
 
-        self.resizeButton = tkinter.Button(self.canvas,relief=FLAT, bg="red")
+        self.resizeButton = tkinter.Button(self.canvas, relief=FLAT, bg="red")
 
 
     def place(self):
@@ -118,7 +117,7 @@ class textLabel(parentItem):
         self.itemStageTrue()
 
     def itemStageFalse(self):
-        self.button.config(borderwidth=0)
+        self.button.config(borderwidth=2)
         self.resizeButton.place_forget()
 
     def itemStageTrue(self):
@@ -161,10 +160,8 @@ class textLabel(parentItem):
 
 
     def generateCode(self):
-        self.code = "       self." + str(self.id) + " = tkinter.Label(self.root, bg=\"" + str(self.bg) + "\", fg=\"" + str(self.fg) + "\", text=\"" + str(self.text) + "\")\n" \
+        self.code = "       self." + str(self.id) + " = tkinter.Button(self.root, bg=\"" + str(self.bg) + "\", fg=\"" + str(self.fg) + "\", text=\"" + str(self.text) + "\")\n" \
                     "       self." + str(self.id) + ".place(x=" + str(self.getX()) + ", y=" + str(self.getY()) + ", width=" + str(self.getWidth()) + ", height=" + str(self.getHeight()) + ")\n"\
                     "\n"
 
         return self.code
-
-
