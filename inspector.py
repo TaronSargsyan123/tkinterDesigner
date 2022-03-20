@@ -139,6 +139,7 @@ class textLabelInspector(defaultInspector):
 
     def okCommand(self):
         print(self.textEntry.get())
+        print("test")
 
         self.setTextLabel(self.widgetInfo.getItem())
 
