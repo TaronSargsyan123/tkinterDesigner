@@ -5,13 +5,16 @@ from textLabel import textLabel
 from tkinter import *
 from singleton import inspectorType, widgetInfo
 import inspector as inspector
-
+from entry import entry
 
 class MainWindow:
     def __init__(self):
         print("[INFO]: init start...")
-        self.textLabelCount = 1
+
         self.buttonCount = 1
+        self.textLabelCount = 1
+        self.entryCount = 1
+        self.count = 1
 
         self.mainWindowColorOne = ""
         self.mainWindowColorTwo = ""
@@ -72,8 +75,9 @@ class MainWindow:
 
         self.leftCanvas = tk.Canvas(self.allCanvas, bg="white", bd=0, highlightthickness=0, relief=FLAT)
 
-        self.createLabelButton = tk.Button(self.leftCanvas, text="     create label       ", command=self.createTextLabelCommand, relief='ridge')
-        self.createButtonButton = tk.Button(self.leftCanvas, text="     create button       ", command=self.createButtonCommand, relief='ridge')
+        self.createLabelButton = tk.Button(self.leftCanvas, text="create label", command=self.createTextLabelCommand, relief='ridge')
+        self.createButtonButton = tk.Button(self.leftCanvas, text="create button", command=self.createButtonCommand, relief='ridge')
+        self.createEntryButton = tk.Button(self.leftCanvas, text="create entry", command=self.createEntryCommand, relief='ridge')
         self.centerCanvas = tk.Canvas(self.allCanvas, bg="#D4D4D4", relief=FLAT)
 
         self.rightCanvas = tk.Canvas(self.allCanvas, bg="white", relief=FLAT)
@@ -90,8 +94,10 @@ class MainWindow:
         self.rightCanvas.pack(side=tk.RIGHT, fill=tk.Y)
         self.centerCanvas.pack(side=tk.RIGHT, fill=tk.BOTH, expand=tk.TRUE)
         self.createLabelButton.pack(side=tk.TOP, pady=5, fill=tk.X)
+        self.createEntryButton.pack(side=tk.TOP, fill=tk.X)
         self.createButtonButton.pack(side=tk.TOP, pady=5, fill=tk.X)
         self.codeGenerateButton.pack(side=tk.BOTTOM, fill=tk.X)
+
 
 
         if self.inspectorType.getInspectorType() == "textLabelInspector":
@@ -123,7 +129,7 @@ class MainWindow:
 
 
     def createTextLabelCommand(self):
-        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector)
+        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
         self.textLabelCount += 1
         self.widgetsList.append(self.textLabel)
 
@@ -132,9 +138,17 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createButtonCommand(self):
-        self.button = button(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector)
+        self.button = button(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
         self.buttonCount += 1
         self.widgetsList.append(self.button)
+
+        self.inspector.setTextLabel(self.widgetInfo.getItem())
+        self.setInspectorInfo()
+
+    def createEntryCommand(self):
+        self.entry = entry(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
+        self.entryCount += 1
+        self.widgetsList.append(self.entry)
 
         self.inspector.setTextLabel(self.widgetInfo.getItem())
         self.setInspectorInfo()
