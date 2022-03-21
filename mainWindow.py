@@ -8,8 +8,13 @@ import inspector as inspector
 from entry import entry
 
 class MainWindow:
-    def __init__(self):
+    def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle, centerWindowColor):
         print("[INFO]: init start...")
+
+        self.centerWindowWidth = centerWindowWidth
+        self.centerWindowHeight = centerWindowHeight
+        self.title = centerWindowTitle
+        self.centerWindowColor = centerWindowColor
 
         self.buttonCount = 1
         self.textLabelCount = 1
@@ -36,14 +41,11 @@ class MainWindow:
         self.__width = 1200
         self.__height = 600
 
-        self.centerWindowWidth = 800
-        self.centerWindowHeight = 450
-
         self.startWindow()
         self.createWidgets()
         self.inspector = inspector.textLabelInspector(self.rightCanvas)
         self.pack()
-        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, "white", "test")
+        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, self.centerWindowColor, self.title)
 
     def startWindow(self):
         self.window = tk.Tk()
@@ -166,19 +168,24 @@ class MainWindow:
     def centerWindow(self, width, height, canvas, color, title):
         centerWindowColor = color
         self.centerWindowtitle = title
-        self.dragCanvas = tk.Canvas(canvas, bg=centerWindowColor)
-        self.centerWindowTitleCanvas = tk.Canvas(self.dragCanvas, bg="#FFFFFF")
+        self.dragCanvas = tk.Canvas(canvas, bg="white")
+        self.centerWindowTitleCanvas = tk.Canvas(self.dragCanvas, bg="white")
         self.centerWindowTitle = tk.Label(self.centerWindowTitleCanvas, text=self.centerWindowtitle, bg="white", font=("Arial", 11))
-        self.itemsCanvas = tk.Canvas(self.dragCanvas, bg="#FFFFFF")
-        self.upBarImage = PhotoImage(file="sprites/upBar.png")
-        upBarLabel = tk.Label(self.dragCanvas, image=self.upBarImage)
+        self.itemsCanvas = tk.Canvas(self.dragCanvas, bg=centerWindowColor)
+        try:
+            self.upBarImage = PhotoImage(file="sprites/upBar.png")
+            upBarLabel = tk.Label(self.dragCanvas, image=self.upBarImage)
+        except:
+            pass
         self.dragCanvas.place(x=50, y=20, width=width, height=height + 30)
         self.centerWindowTitleCanvas.place(x=30, y=0, height=30)
         self.centerWindowTitle.pack( side=LEFT, anchor=SW)
 
         self.itemsCanvas.place(x=0, y=30, width=width, height=height)
-        upBarLabel.place(x=width - 140, y=0, width=140, height=30)
-
+        try:
+            upBarLabel.place(x=width - 140, y=0, width=140, height=30)
+        except:
+            pass
         self.dragCanvas.bind("<Button-1>", self.drag_start)
         self.dragCanvas.bind("<B1-Motion>", self.drag_motion)
 
@@ -192,7 +199,8 @@ class MainWindow:
                         "   def __init__(self):\n" \
                         "       self.root = tkinter.Tk()\n" \
                         "       self.root.geometry(\"" + str(self.centerWindowWidth) + "x" + str(self.centerWindowHeight) + "\")\n" \
-                        "       self.root.title(\"" + str(self.centerWindowtitle) + "\")\n"\
+                        "       self.root.title(\"" + str(self.centerWindowtitle) + "\")\n" \
+                        "       self.root.config(bg=\"" + str(self.centerWindowColor) + "\")\n" \
                         "\n"
 
         self.finalCode = "app = mainWindow()\n" \

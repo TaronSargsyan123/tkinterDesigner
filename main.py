@@ -1,4 +1,5 @@
 from mainWindow import MainWindow
-
-app = MainWindow()
+from startWindow import startWindow
+#app = MainWindow()
+app = startWindow()
 app.window.mainloop()
