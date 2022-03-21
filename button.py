@@ -9,10 +9,6 @@ class button(parentItem):
     def __init__(self, x, y, canvas, labelCount, buttonCount, count, entryCount, list, inspector):
         super().__init__( x, y, canvas, labelCount, buttonCount,  count, entryCount, list, inspector)
 
-
-
-
-
     def createWidgets(self):
         print(self.buttonCount)
         self.id = "Button" + str(self.buttonCount)
