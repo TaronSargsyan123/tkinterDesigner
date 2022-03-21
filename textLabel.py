@@ -6,15 +6,15 @@ from singleton import widgetInfo
 
 
 class textLabel(parentItem):
-    def __init__(self, x, y, canvas, count, labelCount, buttonCount, entryCount, list, inspector):
-        super().__init__(x, y, canvas, count, labelCount, buttonCount, entryCount, list, inspector)
+    def __init__(self, x, y, canvas, count, list, inspector):
+        super().__init__(x, y, canvas, count, list, inspector)
 
 
 
     def createWidgets(self):
-        print(self.labelCount)
-        self.id = "Label" + str(self.labelCount)
-        self.text = "text" + str(self.labelCount)
+        print(self.count)
+        self.id = "Label" + str(self.count)
+        self.text = "text" + str(self.count)
         self.button = tkinter.Button(self.canvas, relief=SOLID, text=self.text, bg=self.bg, fg=self.fg, highlightbackground=self.borderColor, borderwidth=0, command=self.command)
 
         self.resizeButton = tkinter.Button(self.canvas, relief=FLAT, bg="red")

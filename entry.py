@@ -6,17 +6,17 @@ from singleton import widgetInfo
 
 
 class entry(parentItem):
-    def __init__(self, x, y, canvas, labelCount, buttonCount, count, entryCount, list, inspector):
-        super().__init__(x, y, canvas, labelCount, buttonCount,  count, entryCount, list, inspector)
+    def __init__(self, x, y, canvas, count, list, inspector):
+        super().__init__(x, y, canvas,  count, list, inspector)
 
 
 
 
 
     def createWidgets(self):
-        print(self.entryCount)
-        self.id = "Entry" + str(self.entryCount)
-        self.text = "entry" + str(self.entryCount)
+        print(self.count)
+        self.id = "Entry" + str(self.count)
+        self.text = "entry" + str(self.count)
 
         self.button = tkinter.Button(self.canvas, text=self.text, bg=self.bg, fg=self.fg, command=self.command, relief='ridge')
 

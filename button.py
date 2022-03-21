@@ -6,13 +6,13 @@ from singleton import widgetInfo
 
 
 class button(parentItem):
-    def __init__(self, x, y, canvas, labelCount, buttonCount, count, entryCount, list, inspector):
-        super().__init__( x, y, canvas, labelCount, buttonCount,  count, entryCount, list, inspector)
+    def __init__(self, x, y, canvas, count, list, inspector):
+        super().__init__( x, y, canvas, count, list, inspector)
 
     def createWidgets(self):
-        print(self.buttonCount)
-        self.id = "Button" + str(self.buttonCount)
-        self.text = "button" + str(self.buttonCount)
+        print(self.count)
+        self.id = "Button" + str(self.count)
+        self.text = "button" + str(self.count)
 
         self.button = tkinter.Button(self.canvas, text=self.text, bg=self.bg, fg=self.fg, command=self.command)
 

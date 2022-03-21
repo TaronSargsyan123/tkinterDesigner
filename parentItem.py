@@ -2,15 +2,12 @@ import tkinter
 from tkinter import *
 from singleton import widgetInfo
 class parentItem:
-    def __init__(self, x, y, canvas, count, labelCount, buttonCount, entryCount, list, inspector):
+    def __init__(self, x, y, canvas, count, list, inspector):
         self.__x = x
         self.__y = y
 
         self.list = list
         self.count = count
-        self.buttonCount = buttonCount
-        self.labelCount = labelCount
-        self.entryCount = entryCount
         self.id = "item" + str(self.count)
         self.__width = 70
         self.__height = 40

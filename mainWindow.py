@@ -26,7 +26,6 @@ class MainWindow:
         self.widgetInfo = widgetInfo(0, 0, 0, 0, "Null", "Null", "white", "black")
         self.widgetsList = []
 
-        self.centerWindowTitleText = "test title"
         self.allCode = ""
 
         self.initWindow()
@@ -44,7 +43,7 @@ class MainWindow:
         self.createWidgets()
         self.inspector = inspector.textLabelInspector(self.rightCanvas)
         self.pack()
-        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas)
+        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, "white", "test")
 
     def startWindow(self):
         self.window = tk.Tk()
@@ -129,7 +128,7 @@ class MainWindow:
 
 
     def createTextLabelCommand(self):
-        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
+        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector)
         self.textLabelCount += 1
         self.widgetsList.append(self.textLabel)
 
@@ -138,7 +137,7 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createButtonCommand(self):
-        self.button = button(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
+        self.button = button(200, 250, self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector)
         self.buttonCount += 1
         self.widgetsList.append(self.button)
 
@@ -146,16 +145,12 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createEntryCommand(self):
-        self.entry = entry(200, 250, self.itemsCanvas, self.count, self.textLabelCount, self.buttonCount, self.entryCount, self.widgetsList, self.inspector)
+        self.entry = entry(200, 250, self.itemsCanvas, self.entryCount, self.widgetsList, self.inspector)
         self.entryCount += 1
         self.widgetsList.append(self.entry)
 
         self.inspector.setTextLabel(self.widgetInfo.getItem())
         self.setInspectorInfo()
-
-
-
-
 
     def drag_start(self, event):
         widget = event.widget
@@ -168,11 +163,12 @@ class MainWindow:
         y = widget.winfo_y() - widget.startY + event.y
         widget.place(x=x, y=y)
 
-    def centerWindow(self, width, height, canvas):
-
-        self.dragCanvas = tk.Canvas(canvas, bg="white")
+    def centerWindow(self, width, height, canvas, color, title):
+        centerWindowColor = color
+        self.centerWindowtitle = title
+        self.dragCanvas = tk.Canvas(canvas, bg=centerWindowColor)
         self.centerWindowTitleCanvas = tk.Canvas(self.dragCanvas, bg="#FFFFFF")
-        self.centerWindowTitle = tk.Label(self.centerWindowTitleCanvas, text=self.centerWindowTitleText, bg="white", font=("Arial", 11))
+        self.centerWindowTitle = tk.Label(self.centerWindowTitleCanvas, text=self.centerWindowtitle, bg="white", font=("Arial", 11))
         self.itemsCanvas = tk.Canvas(self.dragCanvas, bg="#FFFFFF")
         self.upBarImage = PhotoImage(file="sprites/upBar.png")
         upBarLabel = tk.Label(self.dragCanvas, image=self.upBarImage)
@@ -196,7 +192,7 @@ class MainWindow:
                         "   def __init__(self):\n" \
                         "       self.root = tkinter.Tk()\n" \
                         "       self.root.geometry(\"" + str(self.centerWindowWidth) + "x" + str(self.centerWindowHeight) + "\")\n" \
-                        "       self.root.title(\"" + str(self.centerWindowTitleText) + "\")\n"\
+                        "       self.root.title(\"" + str(self.centerWindowtitle) + "\")\n"\
                         "\n"
 
         self.finalCode = "app = mainWindow()\n" \
