@@ -1,4 +1,6 @@
 import tkinter
+from tkinter.colorchooser import askcolor
+
 from singleton import widgetInfo
 from tkinter import colorchooser
 from tkinter import *
@@ -171,7 +173,7 @@ class textLabelInspector(defaultInspector):
 
 
     def choseColor(self):
-        color_code = colorchooser.askcolor(title="Choose color")
+        color_code = askcolor(title="Tkinter Color Chooser")
         return color_code[1]
 
 

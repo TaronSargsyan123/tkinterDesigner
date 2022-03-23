@@ -1,5 +1,6 @@
 from tkinter import *
-from mainWindow import *
+import tkinter as tk
+from mainWindow import MainWindow
 from tkinter import colorchooser
 
 class startWindow:
@@ -76,12 +77,12 @@ class startWindow:
         self.canvasItemsPackOrPackForget(self.templatesCanvasItems, 1)
         print("templates canvas")
 
-    def choseColor(self):
-        color_code = colorchooser.askcolor(title="Choose color")
-        self.color = color_code[1]
+    #def choseColor(self):
+    #    color_code = colorchooser.askcolor(title="Choose color")
+    #    self.color = color_code[1]
 
     def okCommand(self,widthEntry, heightEntry, titleEntry):
-        app = MainWindow(int(widthEntry), int(heightEntry), titleEntry, self.color)
+        app = MainWindow(int(widthEntry), int(heightEntry), titleEntry)#, self.color)
         self.topLvlWindow.destroy()
         self.window.destroy()
         app.window.mainloop()
@@ -110,15 +111,15 @@ class startWindow:
         heightLabel = Label(heightCanvas, text="Height", relief=FLAT, bg="White")
         titleLabel = Label(titleCanvas, text="Title", relief=FLAT, bg="White")
 
-        colorLabel = Label(colorCanvas, text="bg color", bg="White")
-        color = Button(colorCanvas, text="chose bg color", command=self.choseColor, relief=FLAT, bg="White")
+        #colorLabel = Label(colorCanvas, text="bg color", bg="White")
+        #color = Button(colorCanvas, text="chose bg color")#, command=self.choseColor, relief=FLAT, bg="White")
 
         okButton = Button(self.topLvlWindow, relief=FLAT, bg="#00ED60", fg="White", font=("Arial", 11), text="OK", command=lambda: self.okCommand(widthEntry.get(), heightEntry.get(), titleEntry.get()))
 
         okButton.pack(side=BOTTOM, fill=X)
 
 
-        colorCanvas.pack(side=BOTTOM, fill=X)
+        #colorCanvas.pack(side=BOTTOM, fill=X)
         titleCanvas.pack(side=BOTTOM, fill=X)
         heightCanvas.pack(side=BOTTOM, fill=X)
         widthCanvas.pack(side=BOTTOM, fill=X)
@@ -132,8 +133,8 @@ class startWindow:
         heightLabel.pack(side=LEFT)
         titleLabel.pack(side=LEFT)
 
-        colorLabel.pack(side=LEFT)
-        color.pack(side=RIGHT)
+        #colorLabel.pack(side=LEFT)
+        #color.pack(side=RIGHT)
 
 
 

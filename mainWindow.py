@@ -6,15 +6,17 @@ from tkinter import *
 from singleton import inspectorType, widgetInfo
 import inspector as inspector
 from entry import entry
+from tkinter import filedialog
+
 
 class MainWindow:
-    def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle, centerWindowColor):
+    def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle):
         print("[INFO]: init start...")
 
         self.centerWindowWidth = centerWindowWidth
         self.centerWindowHeight = centerWindowHeight
         self.title = centerWindowTitle
-        self.centerWindowColor = centerWindowColor
+        self.centerWindowColor = "white"
 
         self.buttonCount = 1
         self.textLabelCount = 1
@@ -87,6 +89,25 @@ class MainWindow:
         self.nameCanvas = tk.Canvas(self.rightCanvas)
 
         self.codeGenerateButton = tk.Button(self.leftCanvas, text="Generate", command=self.generateCodeButtonCommand, relief=FLAT, bg="#00ED60", fg="White", font=("Arial", 11))
+
+        menubar = Menu(self.window)
+        self.window.config(menu=menubar)
+        fileMenu = Menu(menubar, tearoff=0)
+        codeMenu = Menu(menubar, tearoff=0)
+        fileMenu.add_command(label='New')
+        fileMenu.add_command(label='Open...')
+        fileMenu.add_command(label='Save')
+        fileMenu.add_command(label='Settings')
+        fileMenu.add_command(label='Menu')
+
+        fileMenu.add_separator()
+        fileMenu.add_command(label='Exit', command=self.window.destroy)
+
+        codeMenu.add_command(label="Generate", command=self.generateCodeButtonCommand)
+        codeMenu.add_command(label='Export', command=self.exportFile)
+        menubar.add_cascade(label="File", menu=fileMenu, underline=0)
+        menubar.add_cascade(label="Code", menu=codeMenu, underline=0)
+
 
     def pack(self):
         self.allCanvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
@@ -232,5 +253,32 @@ class MainWindow:
     def copyToClipboard(self):
         self.window.clipboard_clear()
         self.window.clipboard_append(self.generateCode())
-        #print(self.generateCode())
+
+    def browseFolder(self):
+        filetypes = (('python files', '*.py'), ('All files', '*.*'))
+        folderPath = StringVar()
+        filename = filedialog.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
+        folderPath.set(filename)
+        print(filename)
+        return filename
+
+    def saveFile(self):
+        pass
+
+    def exportFile(self):
+        path = str(self.browseFolder())
+
+        try:
+            pyFile = open(path, 'a').close()
+            print(pyFile)
+        except OSError:
+            print('Failed creating the file')
+        else:
+            print('File created')
+            print(path)
+            f = open(path, 'w')
+            f.truncate(0)
+
+            f.write(self.generateCode())
+            f.close()
 
