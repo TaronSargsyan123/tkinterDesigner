@@ -6,8 +6,17 @@ from singleton import widgetInfo
 
 
 class button(parentItem):
-    def __init__(self, x, y, canvas, count, list, inspector):
+    def __init__(self, x, y, canvas, count, list, inspector, width, height, text, bg, fg):
         super().__init__( x, y, canvas, count, list, inspector)
+        self.type = "button"
+        self.setWidth(width)
+        self.setHeight(height)
+
+        self.setText(text)
+        self.setBg(bg)
+        self.setFg(fg)
+
+
 
     def createWidgets(self):
         print(self.count)
@@ -19,9 +28,12 @@ class button(parentItem):
         self.resizeButton = tkinter.Button(self.canvas, relief=FLAT, bg="red")
 
 
+
     def itemStageFalse(self):
         self.button.config(borderwidth=2)
         self.resizeButton.place_forget()
+
+
 
 
     def generateCode(self):
@@ -30,3 +42,4 @@ class button(parentItem):
                     "\n"
 
         return self.code
+

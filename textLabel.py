@@ -6,8 +6,15 @@ from singleton import widgetInfo
 
 
 class textLabel(parentItem):
-    def __init__(self, x, y, canvas, count, list, inspector):
+    def __init__(self, x, y, canvas, count, list, inspector, width, height, text, bg, fg):
         super().__init__(x, y, canvas, count, list, inspector)
+        self.type = "label"
+        self.setWidth(width)
+        self.setHeight(height)
+
+        self.setText(text)
+        self.setBg(bg)
+        self.setFg(fg)
 
 
 

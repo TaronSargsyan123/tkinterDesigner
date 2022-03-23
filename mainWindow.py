@@ -7,7 +7,7 @@ from singleton import inspectorType, widgetInfo
 import inspector as inspector
 from entry import entry
 from tkinter import filedialog
-
+from json import dumps, loads
 
 class MainWindow:
     def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle):
@@ -55,7 +55,7 @@ class MainWindow:
         self.window.title("TK designer")
 
         self.window["bg"] = "white"
-        self.window.bind('<Escape>', lambda e: self.generateCode())  # self.printWidgetInfo()  self.window.quit()
+        self.window.bind('<Escape>', lambda e: self.clearCentralWindow())#self.generateCode())  # self.printWidgetInfo()  self.window.quit()
 
     def getWidth(self):
         return self.__width
@@ -95,8 +95,8 @@ class MainWindow:
         fileMenu = Menu(menubar, tearoff=0)
         codeMenu = Menu(menubar, tearoff=0)
         fileMenu.add_command(label='New')
-        fileMenu.add_command(label='Open...')
-        fileMenu.add_command(label='Save')
+        fileMenu.add_command(label='Open...', command=self.openFile)
+        fileMenu.add_command(label='Save', command=self.saveFile)
         fileMenu.add_command(label='Settings')
         fileMenu.add_command(label='Menu')
 
@@ -104,7 +104,7 @@ class MainWindow:
         fileMenu.add_command(label='Exit', command=self.window.destroy)
 
         codeMenu.add_command(label="Generate", command=self.generateCodeButtonCommand)
-        codeMenu.add_command(label='Export', command=self.exportFile)
+        codeMenu.add_command(label='Export python file', command=self.exportFile)
         menubar.add_cascade(label="File", menu=fileMenu, underline=0)
         menubar.add_cascade(label="Code", menu=codeMenu, underline=0)
 
@@ -151,7 +151,7 @@ class MainWindow:
 
 
     def createTextLabelCommand(self):
-        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector)
+        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector, 70, 50, "label", "white", "black")
         self.textLabelCount += 1
         self.widgetsList.append(self.textLabel)
 
@@ -160,7 +160,7 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createButtonCommand(self):
-        self.button = button(200, 250, self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector)
+        self.button = button(200, 250, self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, 70, 50, "button", "white", "black")
         self.buttonCount += 1
         self.widgetsList.append(self.button)
 
@@ -168,7 +168,7 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createEntryCommand(self):
-        self.entry = entry(200, 250, self.itemsCanvas, self.entryCount, self.widgetsList, self.inspector)
+        self.entry = entry(200, 250, self.itemsCanvas, self.entryCount, self.widgetsList, self.inspector, 70, 50, "entry", "white", "black")
         self.entryCount += 1
         self.widgetsList.append(self.entry)
 
@@ -254,8 +254,13 @@ class MainWindow:
         self.window.clipboard_clear()
         self.window.clipboard_append(self.generateCode())
 
-    def browseFolder(self):
-        filetypes = (('python files', '*.py'), ('All files', '*.*'))
+    def browseFolder(self, value):
+        filetypes = ""
+        if value == "export":
+            filetypes = (('python files', '*.py'), ('All files', '*.*'))
+        elif value == "save":
+            filetypes = (('text files', '*.txt'), ('All files', '*.*'))
+
         folderPath = StringVar()
         filename = filedialog.askopenfilename(title='Open a file', initialdir='/', filetypes=filetypes)
         folderPath.set(filename)
@@ -263,10 +268,27 @@ class MainWindow:
         return filename
 
     def saveFile(self):
-        pass
+        path = str(self.browseFolder("save"))
+
+        try:
+            txtFile = open(path, 'a').close()
+            print(txtFile)
+        except OSError:
+            print('Failed creating the file')
+        else:
+            print('File created')
+            print(path)
+            f = open(path, 'w')
+            f.truncate(0)
+            for item in self.widgetsList:
+                result = dumps(item.saveLineGeneration())
+                print(result + "\n")
+                f.write(result + "\n")
+
+            f.close()
 
     def exportFile(self):
-        path = str(self.browseFolder())
+        path = str(self.browseFolder("export"))
 
         try:
             pyFile = open(path, 'a').close()
@@ -281,4 +303,48 @@ class MainWindow:
 
             f.write(self.generateCode())
             f.close()
+
+    def openFile(self):
+        for i in range(len(self.widgetsList) + 10):
+            self.clearCentralWindow()
+        path = str(self.browseFolder("open..."))
+        with open(path) as f:
+            lines = f.readlines()
+            for i in lines:
+                #print(i)
+                result = loads(i)
+                #print(result)
+                if result['type'] == 'button':
+                    self.button = button(result['x'], result['y'], self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, result['w'], result['h'], result['txt'], result['bg'], result['fg'])
+                    self.buttonCount += 1
+                    #self.button.createWidgets()
+                    self.button.place()
+                    self.widgetsList.append(self.button)
+
+                    self.inspector.setTextLabel(self.widgetInfo.getItem())
+                    self.setInspectorInfo()
+                elif result['type'] == 'label':
+                    self.label = textLabel(result['x'], result['y'], self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, result['w'], result['h'], result['txt'], result['bg'], result['fg'])
+                    self.textLabelCount += 1
+                    #self.label.createWidgets()
+                    self.label.place()
+                    self.widgetsList.append(self.label)
+
+                    self.inspector.setTextLabel(self.widgetInfo.getItem())
+                    self.setInspectorInfo()
+                elif result['type'] == 'entry':
+                    self.entry = entry(result['x'], result['y'], self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, result['w'], result['h'], result['txt'], result['bg'], result['fg'])
+                    self.entryCount += 1
+                    #self.entry.createWidgets()
+                    self.entry.place()
+                    self.widgetsList.append(self.entry)
+
+                    self.inspector.setTextLabel(self.widgetInfo.getItem())
+                    self.setInspectorInfo()
+
+    def clearCentralWindow(self):
+        print(self.widgetsList)
+        for item in self.widgetsList:
+            item.placeForget()
+        print(self.widgetsList)
 

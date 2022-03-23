@@ -6,6 +6,8 @@ class parentItem:
         self.__x = x
         self.__y = y
 
+        self.type = "item"
+
         self.list = list
         self.count = count
         self.id = "item" + str(self.count)
@@ -132,6 +134,7 @@ class parentItem:
         self.resizeButton.place(x=int(self.getX())+int(self.getWidth()), y=int(self.getY())+int(self.getHeight()), width=5, height=5)
         self.inspector()
         self.generateCode()
+        #self.button.bind('<Return>', self.placeForget)
 
 
     def inspector(self):
@@ -168,4 +171,17 @@ class parentItem:
     def generateCode(self):
         pass
 
+    def saveLineGeneration(self):
+        self.saveFileLine = {"x": int(self.getX()), "y": int(self.getY()),
+                             "w": int(self.getWidth()), "h": int(self.getHeight()),
+                             "txt": self.text, "bg": self.bg, "fg": self.fg,
+                             "type": self.type, "id": self.id}
+        print(type(self.saveFileLine))
+        return self.saveFileLine
 
+    def placeForget(self):
+
+        self.button.place_forget()
+        self.resizeButton.place_forget()
+        self.list.remove(self)
+        print(self.list)
