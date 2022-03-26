@@ -121,6 +121,8 @@ class textLabelInspector(defaultInspector):
         self.fgColorShoserButton = tkinter.Button(self.fgColorShoserCanvas, text="chose font color", command=self.choseFgColor, relief=FLAT)
         self.fgColorFrame = tkinter.Frame(self.fgColorShoserCanvas, width=25, height=25, bg=self.bg)
 
+        self.deleteButton = tkinter.Button(self.inspectorCanvas, text="delete", command=self.deleteButtonCommand, relief=FLAT, bg="#FF5140", fg="white")
+
         self.textCanvas.pack(pady=10, fill=tkinter.X)
         self.textLabel.pack(side=tkinter.LEFT)
         self.textEntry.pack(side=tkinter.RIGHT)
@@ -132,6 +134,9 @@ class textLabelInspector(defaultInspector):
         self.fgColorShoserCanvas.pack(pady=10, fill=tkinter.X)
         self.fgColorFrame.pack(side=tkinter.LEFT, padx=10)
         self.fgColorShoserButton.pack(side=tkinter.RIGHT, padx=10)
+
+        self.deleteButton.pack(pady=10, fill=tkinter.X)
+
 
 
 
@@ -212,5 +217,8 @@ class textLabelInspector(defaultInspector):
 
         self.fg = fg
         self.fgColorFrame.config(bg=self.fg)
+
+    def deleteButtonCommand(self):
+        self.widgetInfo.getItem().placeForget()
 
 

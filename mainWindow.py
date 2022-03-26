@@ -269,6 +269,7 @@ class MainWindow:
 
     def saveFile(self):
         path = str(self.browseFolder("save"))
+        settingsTxtPath = "settingsTxt"
 
         try:
             txtFile = open(path, 'a').close()
@@ -284,6 +285,9 @@ class MainWindow:
                 result = dumps(item.saveLineGeneration())
                 print(result + "\n")
                 f.write(result + "\n")
+
+            settingsTxt = open(settingsTxtPath, 'w')
+            settingsTxt.write(str(self.centerWindowtitle) + " - " + path)
 
             f.close()
 

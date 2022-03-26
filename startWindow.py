@@ -1,7 +1,7 @@
 from tkinter import *
-import tkinter as tk
-from mainWindow import MainWindow
-from tkinter import colorchooser
+
+import mainWindow
+
 
 class startWindow:
     def __init__(self):
@@ -9,7 +9,7 @@ class startWindow:
         self.buttonsStage = 0
         self.projectsCanvasItems = []
         self.templatesCanvasItems = []
-
+        self.newWindow = newWindow
         self.window = Tk()
         self.window.geometry("650x500")
         self.window.title("tk designer")
@@ -81,17 +81,14 @@ class startWindow:
     #    color_code = colorchooser.askcolor(title="Choose color")
     #    self.color = color_code[1]
 
-    def okCommand(self,widthEntry, heightEntry, titleEntry):
-        app = MainWindow(int(widthEntry), int(heightEntry), titleEntry)#, self.color)
-        self.topLvlWindow.destroy()
-        self.window.destroy()
-        app.window.mainloop()
 
 
 
-    def newWindow(self):
+class newWindow:
+    from mainWindow import MainWindow
+    def __init__(self):
 
-        self.topLvlWindow = tk.Toplevel(self.window)
+        self.topLvlWindow = Tk()
         self.topLvlWindow.title("Generate code")
         self.topLvlWindow.geometry("250x120")
         self.topLvlWindow.config(bg="White")
@@ -132,9 +129,12 @@ class startWindow:
         widthLabel.pack(side=LEFT)
         heightLabel.pack(side=LEFT)
         titleLabel.pack(side=LEFT)
+        self.topLvlWindow.mainloop()
 
-        #colorLabel.pack(side=LEFT)
-        #color.pack(side=RIGHT)
+    def okCommand(self,widthEntry, heightEntry, titleEntry):
+        self.app = mainWindow.MainWindow(int(widthEntry), int(heightEntry), titleEntry)
+        self.topLvlWindow.destroy()
+        self.app.window.mainloop()
 
 
 
