@@ -8,10 +8,13 @@ import inspector as inspector
 from entry import entry
 from tkinter import filedialog
 from json import dumps, loads
-
+from projectBarComponent import projectBarComponent
+import os
+from pathlib import Path
 class MainWindow:
     def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle):
         print("[INFO]: init start...")
+        self.pathToProject = ""
 
         self.centerWindowWidth = centerWindowWidth
         self.centerWindowHeight = centerWindowHeight
@@ -48,6 +51,11 @@ class MainWindow:
         self.inspector = inspector.textLabelInspector(self.rightCanvas)
         self.pack()
         self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, self.centerWindowColor, self.title)
+        #self.projectsBarComponent = projectBarComponent(self.projectsBar, self.title)
+
+
+
+
 
     def startWindow(self):
         self.window = tk.Tk()
@@ -94,9 +102,10 @@ class MainWindow:
         self.window.config(menu=menubar)
         fileMenu = Menu(menubar, tearoff=0)
         codeMenu = Menu(menubar, tearoff=0)
-        fileMenu.add_command(label='New')
+        fileMenu.add_command(label='New', command=self.newFile)
         fileMenu.add_command(label='Open...', command=self.openFile)
         fileMenu.add_command(label='Save', command=self.saveFile)
+        fileMenu.add_command(label='Save As...', command=self.saveAsFile)
         fileMenu.add_command(label='Settings')
         fileMenu.add_command(label='Menu')
 
@@ -108,9 +117,14 @@ class MainWindow:
         menubar.add_cascade(label="File", menu=fileMenu, underline=0)
         menubar.add_cascade(label="Code", menu=codeMenu, underline=0)
 
+        #self.projectsBar = tk.Canvas(self.allCanvas, bg="red", bd=0, highlightthickness=0, relief=FLAT)
+
+
 
     def pack(self):
         self.allCanvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
+        #self.projectsBar.pack(side=tk.TOP, fill=tk.X)
+
 
         self.leftCanvas.pack(side=tk.LEFT, fill=tk.Y)
         self.rightCanvas.pack(side=tk.RIGHT, fill=tk.Y)
@@ -267,9 +281,10 @@ class MainWindow:
         print(filename)
         return filename
 
-    def saveFile(self):
+    def saveAsFile(self):
         path = str(self.browseFolder("save"))
         settingsTxtPath = "settingsTxt"
+        self.pathToProject = path
 
         try:
             txtFile = open(path, 'a').close()
@@ -312,6 +327,7 @@ class MainWindow:
         for i in range(len(self.widgetsList) + 10):
             self.clearCentralWindow()
         path = str(self.browseFolder("open..."))
+        self.pathToProject = path
         with open(path) as f:
             lines = f.readlines()
             for i in lines:
@@ -351,4 +367,37 @@ class MainWindow:
         for item in self.widgetsList:
             item.placeForget()
         print(self.widgetsList)
+
+    def newFile(self):
+        for i in range(len(self.widgetsList) + 10):
+            self.clearCentralWindow()
+        pathToUser = Path.home()
+
+        directory = Path(str(pathToUser) + "\Tk-Projects")
+
+        try:
+            os.mkdir(directory)
+            print("Directory ", directory, " Created ")
+        except FileExistsError:
+            print("Directory ", directory, " already exists")
+
+
+
+        f = open(directory.joinpath("project.txt"), 'w')
+        print('File created')
+
+        self.pathToProject = str(directory) + "\project.txt"
+
+    def saveFile(self):
+        path = self.pathToProject
+        print(path)
+        f = open(Path(path), "w")
+
+        for item in self.widgetsList:
+            result = dumps(item.saveLineGeneration())
+            print(result + "\n")
+            f.write(result + "\n")
+
+
+
 
