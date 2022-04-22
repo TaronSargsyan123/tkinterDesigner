@@ -11,14 +11,13 @@ from json import dumps, loads
 from projectBarComponent import projectBarComponent
 import os
 from pathlib import Path
+
 class MainWindow:
-    def __init__(self, centerWindowWidth, centerWindowHeight, centerWindowTitle):
+    def __init__(self):
         print("[INFO]: init start...")
         self.pathToProject = ""
 
-        self.centerWindowWidth = centerWindowWidth
-        self.centerWindowHeight = centerWindowHeight
-        self.title = centerWindowTitle
+
         self.centerWindowColor = "white"
 
         self.buttonCount = 1
@@ -50,8 +49,9 @@ class MainWindow:
         self.createWidgets()
         self.inspector = inspector.textLabelInspector(self.rightCanvas)
         self.pack()
-        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, self.centerWindowColor, self.title)
+        #self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, self.centerWindowColor, self.title)
         #self.projectsBarComponent = projectBarComponent(self.projectsBar, self.title)
+        self.menu()
 
 
 
@@ -76,6 +76,78 @@ class MainWindow:
 
     def setHeight(self, height):
         self.__height = height
+
+    def menu(self):
+        def newWindow():
+            canvas.pack_forget()
+            self.createWindowItem()
+
+        def openWindow():
+
+            canvas.pack_forget()
+            self.openFile()
+        def closeWindow():
+            canvas.pack_forget()
+
+
+        canvas = Canvas(self.centerCanvas, bg="white")
+        closeCanvas = Canvas(canvas, bg="white", width=20, height=10,)
+        newOpenCanvas = Canvas(canvas, bg="white", width=20, height=10,)
+        newButton = Button(newOpenCanvas, text="New", width=20, height=10, relief='ridge', bg="#00ED60", fg="White", font=("Arial", 11), command=newWindow)
+        openButton = Button(newOpenCanvas, text="Open", width=20, height=10, relief='ridge', bg="#3675EC", fg="White", font=("Arial", 11), command=openWindow)
+        closeButton = Button(closeCanvas, text="{text}".format(text='\u274C'), width=2, height=1, relief='ridge', bg="#FF5140", fg="White", font=("Arial", 11), command=closeWindow)
+
+        canvas.pack(side=tk.BOTTOM, fill=None, expand=True)
+        closeCanvas.pack(side=TOP, fill=X)
+        newOpenCanvas.pack(side=tk.BOTTOM)
+        newButton.pack(side=tk.LEFT, padx=(10, 5), pady=(10, 10))
+        openButton.pack(side=tk.LEFT, padx=(5, 10), pady=(10, 10))
+        closeButton.pack(padx=10, pady=5, side=RIGHT)
+
+    def create(self, width, height, title, canvas):
+        self.centerWindowWidth = int(width)
+        self.centerWindowHeight = int(height)
+        self.centerWindowTitle = str(title)
+        self.centerWindow(self.centerWindowWidth, self.centerWindowHeight, self.centerCanvas, self.centerWindowColor, self.centerWindowTitle)
+        canvas.pack_forget()
+
+    def open(self):
+        pass
+
+    def createWindowItem(self):
+
+        canvas = Canvas(self.centerCanvas, bg="white")
+
+        nameCanvas = Canvas(canvas, bg="white", relief=FLAT)
+        widthCanvas = Canvas(canvas, bg="white", relief=FLAT)
+        heightCanvas = Canvas(canvas, bg="white", relief=FLAT)
+
+        nameEntry = Entry(nameCanvas, width=40, bg="white")
+        widthEntry = Entry(widthCanvas, width=40, bg="white")
+        heightEntry = Entry(heightCanvas, width=40, bg="white")
+
+        nameLabel = Label(nameCanvas, text="Enter title", bg="white", relief=FLAT)
+        widthLabel = Label(widthCanvas, text="Enter width", bg="white", relief=FLAT)
+        heightLabel = Label(heightCanvas, text="Enter height", bg="white", relief=FLAT)
+
+        button = Button(canvas, text="Create", width=40, height=1, relief='ridge', bg="#00ED60", fg="White", font=("Arial", 11), command=lambda: self.create(widthEntry.get(), heightEntry.get(), nameEntry.get(), canvas))
+
+        canvas.pack(side=tk.BOTTOM, fill=None, expand=True)
+
+        nameCanvas.pack(side=tk.TOP, fill=X)
+        widthCanvas.pack(side=tk.TOP, fill=X)
+        heightCanvas.pack(side=tk.TOP, fill=X)
+
+        nameEntry.pack(side=tk.RIGHT, padx=(10, 10), pady=(10, 10))
+        widthEntry.pack(side=tk.RIGHT, padx=(10, 10), pady=(10, 10))
+        heightEntry.pack(side=tk.RIGHT, padx=(10, 10), pady=(10, 10))
+
+        nameLabel.pack(side=tk.LEFT, padx=(10, 10), pady=(10, 10))
+        widthLabel.pack(side=tk.LEFT, padx=(10, 10), pady=(10, 10))
+        heightLabel.pack(side=tk.LEFT, padx=(10, 10), pady=(10, 10))
+
+        button.pack(side=tk.BOTTOM, padx=(10, 5), pady=(10, 10))
+
 
     def createWidgets(self):
 
@@ -102,12 +174,12 @@ class MainWindow:
         self.window.config(menu=menubar)
         fileMenu = Menu(menubar, tearoff=0)
         codeMenu = Menu(menubar, tearoff=0)
-        fileMenu.add_command(label='New', command=self.newFile)
+        #fileMenu.add_command(label='New', command=self.newFile)
         fileMenu.add_command(label='Open...', command=self.openFile)
         fileMenu.add_command(label='Save', command=self.saveFile)
         fileMenu.add_command(label='Save As...', command=self.saveAsFile)
         fileMenu.add_command(label='Settings')
-        fileMenu.add_command(label='Menu')
+
 
         fileMenu.add_separator()
         fileMenu.add_command(label='Exit', command=self.window.destroy)
@@ -165,7 +237,7 @@ class MainWindow:
 
 
     def createTextLabelCommand(self):
-        self.textLabel = textLabel(200, 250, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector, 70, 50, "label", "white", "black")
+        self.textLabel = textLabel(0, 0, self.itemsCanvas, self.textLabelCount, self.widgetsList, self.inspector, 70, 50, "label", "white", "black")
         self.textLabelCount += 1
         self.widgetsList.append(self.textLabel)
 
@@ -174,7 +246,7 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createButtonCommand(self):
-        self.button = button(200, 250, self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, 70, 50, "button", "white", "black")
+        self.button = button(0, 0, self.itemsCanvas, self.buttonCount, self.widgetsList, self.inspector, 70, 50, "button", "white", "black")
         self.buttonCount += 1
         self.widgetsList.append(self.button)
 
@@ -182,7 +254,7 @@ class MainWindow:
         self.setInspectorInfo()
 
     def createEntryCommand(self):
-        self.entry = entry(200, 250, self.itemsCanvas, self.entryCount, self.widgetsList, self.inspector, 70, 50, "entry", "white", "black")
+        self.entry = entry(0, 0, self.itemsCanvas, self.entryCount, self.widgetsList, self.inspector, 70, 50, "entry", "white", "black")
         self.entryCount += 1
         self.widgetsList.append(self.entry)
 
@@ -205,7 +277,7 @@ class MainWindow:
         self.centerWindowtitle = title
         self.dragCanvas = tk.Canvas(canvas, bg="white")
         self.centerWindowTitleCanvas = tk.Canvas(self.dragCanvas, bg="white")
-        self.centerWindowTitle = tk.Label(self.centerWindowTitleCanvas, text=self.centerWindowtitle, bg="white", font=("Arial", 11))
+        self.centerWindowTitleLabel = tk.Label(self.centerWindowTitleCanvas, text=self.centerWindowtitle, bg="white", font=("Arial", 11))
         self.itemsCanvas = tk.Canvas(self.dragCanvas, bg=centerWindowColor)
         try:
             self.upBarImage = PhotoImage(file="sprites/upBar.png")
@@ -214,7 +286,7 @@ class MainWindow:
             pass
         self.dragCanvas.place(x=50, y=20, width=width, height=height + 30)
         self.centerWindowTitleCanvas.place(x=30, y=0, height=30)
-        self.centerWindowTitle.pack( side=LEFT, anchor=SW)
+        self.centerWindowTitleLabel.pack( side=LEFT, anchor=SW)
 
         self.itemsCanvas.place(x=0, y=30, width=width, height=height)
         try:
@@ -292,10 +364,21 @@ class MainWindow:
         except OSError:
             print('Failed creating the file')
         else:
+            line = {"type": "window",
+                    "windowWidth": self.centerWindowWidth,
+                    "windowHeight": self.centerWindowHeight,
+                    "windowTitle": self.centerWindowTitle,
+                    }
+
+
             print('File created')
             print(path)
             f = open(path, 'w')
             f.truncate(0)
+            temp = dumps(line)
+            print(type(temp))
+            print(temp)
+            f.write(temp + "\n")
             for item in self.widgetsList:
                 result = dumps(item.saveLineGeneration())
                 print(result + "\n")
@@ -305,6 +388,24 @@ class MainWindow:
             settingsTxt.write(str(self.centerWindowtitle) + " - " + path)
 
             f.close()
+
+    def saveFile(self):
+        path = self.pathToProject
+        print(path)
+        f = open(Path(path), "w")
+        line = {"type": "window",
+                "windowWidth": self.centerWindowWidth,
+                "windowHeight": self.centerWindowHeight,
+                "windowTitle": self.centerWindowTitle,
+                }
+        temp = dumps(line)
+        print(type(temp))
+        print(temp)
+        f.write(temp + "\n")
+        for item in self.widgetsList:
+            result = dumps(item.saveLineGeneration())
+            print(result + "\n")
+            f.write(result + "\n")
 
     def exportFile(self):
         path = str(self.browseFolder("export"))
@@ -361,6 +462,11 @@ class MainWindow:
 
                     self.inspector.setTextLabel(self.widgetInfo.getItem())
                     self.setInspectorInfo()
+                elif result['type'] == 'window':
+                    self.centerWindowWidth = result['windowWidth']
+                    self.centerWindowHeight =  result['windowHeight']
+                    self.centerWindowTitle = result['windowTitle']
+                    self.centerWindow(result['windowWidth'], result['windowHeight'], self.centerCanvas, "white", result['windowTitle'])
 
     def clearCentralWindow(self):
         print(self.widgetsList)
@@ -369,6 +475,7 @@ class MainWindow:
         print(self.widgetsList)
 
     def newFile(self):
+
         for i in range(len(self.widgetsList) + 10):
             self.clearCentralWindow()
         pathToUser = Path.home()
@@ -388,15 +495,7 @@ class MainWindow:
 
         self.pathToProject = str(directory) + "\project.txt"
 
-    def saveFile(self):
-        path = self.pathToProject
-        print(path)
-        f = open(Path(path), "w")
 
-        for item in self.widgetsList:
-            result = dumps(item.saveLineGeneration())
-            print(result + "\n")
-            f.write(result + "\n")
 
 
 
