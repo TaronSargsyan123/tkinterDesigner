@@ -1,6 +1,6 @@
 import tkinter
 
-from parentItem import parentItem
+from templates.parentItem import parentItem
 from tkinter import *
 from singleton import widgetInfo
 

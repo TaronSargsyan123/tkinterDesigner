@@ -1,14 +1,12 @@
 import tkinter as tk
-from button import button
-import textLabel
-from textLabel import textLabel
+from templates.button import button
+from templates.textLabel import textLabel
 from tkinter import *
 from singleton import inspectorType, widgetInfo
-import inspector as inspector
-from entry import entry
+from templates import inspector as inspector
+from templates.entry import entry
 from tkinter import filedialog
 from json import dumps, loads
-from projectBarComponent import projectBarComponent
 import os
 from pathlib import Path
 
