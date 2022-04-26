@@ -7,7 +7,7 @@ from templates import inspector as inspector
 from templates.entry import entry
 from tkinter import filedialog
 from json import dumps, loads
-import os
+
 from pathlib import Path
 
 class MainWindow:
@@ -83,7 +83,7 @@ class MainWindow:
         def openWindow():
 
             canvas.pack_forget()
-            self.openFile()
+            self.openFile(None)
         def closeWindow():
             canvas.pack_forget()
 
@@ -350,6 +350,9 @@ class MainWindow:
         folderPath.set(filename)
         print(filename)
         return filename
+    def askDirectory(self):
+        folderPath = filedialog.askdirectory()
+        return folderPath
 
     def saveAsFile(self):
         path = str(self.browseFolder("save"))
@@ -422,10 +425,15 @@ class MainWindow:
             f.write(self.generateCode())
             f.close()
 
-    def openFile(self):
+    def openFile(self, path):
         for i in range(len(self.widgetsList) + 10):
             self.clearCentralWindow()
-        path = str(self.browseFolder("open..."))
+
+        if path == None:
+            path = str(self.browseFolder("open..."))
+        else:
+            path = path
+
         self.pathToProject = path
         with open(path) as f:
             lines = f.readlines()
@@ -476,22 +484,16 @@ class MainWindow:
 
         for i in range(len(self.widgetsList) + 10):
             self.clearCentralWindow()
-        pathToUser = Path.home()
 
-        directory = Path(str(pathToUser) + "\Tk-Projects")
+        directory = self.askDirectory()
 
         try:
-            os.mkdir(directory)
-            print("Directory ", directory, " Created ")
-        except FileExistsError:
-            print("Directory ", directory, " already exists")
+            f = open(directory + "/project.txt", "w+")
+        except:
+            print("File create error")
 
-
-
-        f = open(directory.joinpath("project.txt"), 'w')
-        print('File created')
-
-        self.pathToProject = str(directory) + "\project.txt"
+        self.pathToProject = f.name
+        self.openFile(self.pathToProject)
 
 
 
