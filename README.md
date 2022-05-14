@@ -1,4 +1,4 @@
-d# tkinterDesigner
+# tkinterDesigner
 MVP
 
 Tk Designer is for people who want to quickly create a layout for their desktop application. 
